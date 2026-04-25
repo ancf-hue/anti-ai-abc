@@ -1,0 +1,16 @@
+/* TEAM */
+    Developer: Антон Кузнецов
+    Location: Воронеж, Россия
+    Website: https://ancf-hue.github.io/
+    Contact: https://github.com/ancf-hue
+    
+/* PROJECT */
+    Name: Анти ИИ Азбука
+    Description: Бесплатное офлайн-приложение для изучения алфавита на 8 языках. 
+                 Работает без интернета, без сбора данных.
+    Technologies: HTML5, CSS3, JavaScript, Web Speech API
+    License: Free for educational and personal use
+    Repository: https://github.com/ancf-hue/anti-ii-azbuka
+    
+/* LAST UPDATE */
+    2026-04-25

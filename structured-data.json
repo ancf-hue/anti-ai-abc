@@ -1,0 +1,31 @@
+{
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Анти ИИ Азбука",
+    "description": "Бесплатное офлайн-приложение для изучения алфавита на 8 языках. Работает без интернета и без сбора данных.",
+    "url": "https://ancf-hue.github.io/",
+    "applicationCategory": "Education",
+    "operatingSystem": "All",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RUB"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Антон Кузнецов",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Воронеж",
+            "addressCountry": "RU"
+        }
+    },
+    "availableLanguage": ["ru", "en", "es", "fr", "de", "zh", "ar", "ja"],
+    "featureList": [
+        "Работает офлайн",
+        "8 языков для изучения",
+        "Звуковое сопровождение",
+        "Адаптивный дизайн",
+        "Без сбора данных"
+    ]
+}

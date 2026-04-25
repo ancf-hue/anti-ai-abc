@@ -1,0 +1,19 @@
+User-agent: Yandex
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://ancf-hue.github.io/sitemap.xml
+
+# Запрещаем индексацию служебных страниц
+Disallow: /soundsru/
+Disallow: /*.mp3$
+Disallow: /*.ico$
+
+# Основные правила
+Crawl-delay: 1
+Host: ancf-hue.github.io

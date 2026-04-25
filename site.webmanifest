@@ -1,0 +1,19 @@
+{
+    "name": "Анти ИИ Азбука",
+    "short_name": "Азбука",
+    "description": "Бесплатная офлайн-азбука для изучения алфавита на 8 языках",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#302b63",
+    "background_color": "#0f0c29",
+    "icons": [
+        {
+            "src": "favicon.ico",
+            "sizes": "64x64",
+            "type": "image/x-icon"
+        }
+    ],
+    "lang": "ru",
+    "orientation": "portrait",
+    "categories": ["education", "kids"]
+}

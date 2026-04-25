@@ -1,0 +1,8 @@
+# Основные редиректы
+/ /index.html 200
+
+# Редирект с www на без www
+https://www.ancf-hue.github.io/ https://ancf-hue.github.io/ 301
+
+# Редирект с HTTP на HTTPS
+http://ancf-hue.github.io/ https://ancf-hue.github.io/ 301
