@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,368 +7,334 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --glow-primary: rgba(255, 215, 0, 0.9);
+            --glow-secondary: rgba(255, 255, 255, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --grad-1: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            --grad-2: linear-gradient(135deg, #4D96FF, #6BCB77);
+            --grad-3: linear-gradient(135deg, #FFD93D, #FFB347);
+            --grad-4: linear-gradient(135deg, #9B59B6, #E74C3C);
+            --grad-5: linear-gradient(135deg, #1ABC9C, #3498DB);
+            --grad-6: linear-gradient(135deg, #E91E63, #9C27B0);
+            --grad-7: linear-gradient(135deg, #00BCD4, #2196F3);
+            --grad-8: linear-gradient(135deg, #FF9800, #F44336);
+        }
+        
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(123, 31, 162, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(77, 150, 255, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* СТРАНИЦЫ */
-        .page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            opacity: 0;
-            visibility: hidden;
+        .bg-particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 0;
         }
-        .page.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* СТРАНИЦА 1 - ЗАСТАВКА */
-        .splash {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-        }
-        .splash .logo-img {
-            width: 150px;
-            height: 150px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.5));
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 40px rgba(255,255,255,0.8)); }
-        }
-        .splash h2 {
-            margin-top: 30px;
-            color: white;
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            animation: fadeInUp 0.8s ease;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* ОБЩИЕ СТИЛИ ДЛЯ СТРАНИЦ */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* ШАПКА С ЛОГОТИПОМ */
-        .header {
-            text-align: center;
-            padding: 20px 0 10px;
-            color: white;
-        }
-        .header-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .header-logo img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-            animation: float 3s ease-in-out infinite;
+        .particle {
+            position: absolute; width: 4px; height: 4px;
+            background: rgba(255, 255, 255, 0.6); border-radius: 50%;
+            animation: float 15s infinite linear; opacity: 0.7;
         }
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
         }
+        
+        .page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            overflow-y: auto; transition: opacity 0.4s ease, visibility 0.4s ease;
+            opacity: 0; visibility: hidden; z-index: 10;
+        }
+        .page.active { opacity: 1; visibility: visible; }
+        
+        .splash {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: inherit;
+        }
+        .splash .logo-img {
+            width: 140px; height: 140px; object-fit: contain;
+            filter: drop-shadow(0 0 25px rgba(255,215,0,0.8));
+            animation: pulseGlow 1.8s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 25px rgba(255,215,0,0.6)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 45px rgba(255,215,0,1)); }
+        }
+        .splash h2 {
+            margin-top: 25px; color: white; font-size: 1.4rem; letter-spacing: 3px;
+            animation: fadeInUp 0.8s ease; text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; position: relative; z-index: 11; }
+        
+        .header { text-align: center; padding: 20px 0 10px; color: white; }
+        .header-logo {
+            display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+        }
+        .header-logo img {
+            width: 55px; height: 55px; object-fit: contain;
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+        @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .header-logo h1 {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            background: linear-gradient(45deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF);
+            font-size: clamp(1.4rem, 5vw, 2.3rem);
+            background: linear-gradient(45deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF, #FF6B6B);
             background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
+            -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: rainbow 3s ease infinite;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         @keyframes rainbow { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
         
-        /* КНОПКИ НАВИГАЦИИ */
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
+        .nav-buttons { display: flex; justify-content: center; gap: 18px; margin-top: 22px; }
         .nav-btn {
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 50px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            backdrop-filter: blur(5px);
+            padding: 11px 22px; background: var(--glass-bg); border: 2px solid var(--glass-border);
+            border-radius: 50px; color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+            transition: all 0.25s ease; backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .nav-btn:hover {
-            background: rgba(255,255,255,0.4);
-            transform: translateY(-2px);
+            background: rgba(255,255,255,0.25); transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
         }
+        .nav-btn:active { transform: translateY(-1px) scale(0.98); }
         
-        /* СТРАНИЦА ПОДДЕРЖКИ */
         .support-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 28px;
-            padding: 30px;
-            margin: 20px 0;
-            text-align: center;
-            color: white;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-radius: 30px; padding: 32px; margin: 20px 0; text-align: center; color: white;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25), inset 0 1px 0 var(--glass-highlight);
         }
-        .support-title {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            margin-bottom: 20px;
-        }
-        .support-emoji {
-            font-size: 4rem;
-            margin: 20px 0;
-        }
-        .description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin: 20px 0;
-            opacity: 0.9;
-        }
+        .support-title { font-size: clamp(1.7rem, 5vw, 2.3rem); margin-bottom: 18px; font-weight: 700; }
+        .support-emoji { font-size: 4.2rem; margin: 18px 0; animation: bounce 2s ease infinite; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .description { font-size: 1.05rem; line-height: 1.65; margin: 18px 0; opacity: 0.95; }
+        
         .phone-number {
-            background: rgba(0,0,0,0.4);
-            padding: 18px;
-            border-radius: 60px;
-            margin: 25px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            background: rgba(0,0,0,0.35); padding: 16px 20px; border-radius: 60px; margin: 22px 0;
+            display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+            border: 1px solid rgba(255,255,255,0.15);
         }
         .phone-number span {
-            font-size: 1.6rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            font-family: monospace;
+            font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; font-family: monospace;
+            background: linear-gradient(45deg, #ffd700, #fff); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .copy-btn {
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: linear-gradient(45deg, #ffd700, #ffed4e); border: none; padding: 9px 22px;
+            border-radius: 40px; font-size: 0.95rem; font-weight: 700; color: #2d2d2d; cursor: pointer;
+            transition: all 0.2s; box-shadow: 0 4px 15px rgba(255,215,0,0.4);
         }
-        .copy-btn:active { transform: scale(0.95); }
+        .copy-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,215,0,0.6); }
+        .copy-btn:active { transform: scale(0.97); }
         .copy-success {
-            background: #4CAF50;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            background: #4CAF50; color: white; padding: 4px 12px; border-radius: 18px;
+            font-size: 0.8rem; font-weight: 600; animation: fadeIn 0.3s ease;
         }
-        .projects-link {
-            margin: 30px 0;
-            font-size: 1.2rem;
-        }
-        .projects-link a {
-            color: #FFD93D;
-            text-decoration: none;
-            border-bottom: 2px solid #FFD93D;
-            word-break: break-all;
-        }
-        .thanks {
-            font-size: 1.3rem;
-            margin-top: 25px;
-            color: #FFD93D;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         
-        /* АЗБУКА */
+        .projects-link { margin: 28px 0; font-size: 1.15rem; }
+        .projects-link a {
+            color: #FFD93D; text-decoration: none; border-bottom: 2px solid #FFD93D;
+            word-break: break-all; transition: all 0.2s;
+        }
+        .projects-link a:hover { color: #fff; border-color: #fff; }
+        .thanks { font-size: 1.25rem; margin-top: 22px; color: #FFD93D; font-weight: 600; }
+        
         .language-selector {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; margin: 18px 0;
+            padding: 14px; background: var(--glass-bg); border-radius: 22px;
+            backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
         }
         .lang-btn {
-            padding: 6px 12px;
-            border: 2px solid rgba(255,255,255,0.5);
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.25s;
+            padding: 5px 11px; border: 2px solid var(--glass-border); background: rgba(255,255,255,0.15);
+            color: white; border-radius: 50px; cursor: pointer; font-size: 0.78rem; font-weight: 600;
+            transition: all 0.25s; backdrop-filter: blur(6px);
         }
+        .lang-btn:hover { background: rgba(255,255,255,0.28); transform: translateY(-2px); }
         .lang-btn.active {
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            color: #764ba2;
-            border-color: #ffd700;
+            background: linear-gradient(45deg, #ffd700, #ffed4e); color: #2d2d2d;
+            border-color: #ffd700; font-weight: 700; box-shadow: 0 0 20px rgba(255,215,0,0.5);
         }
         .current-lang {
-            text-align: center;
-            color: white;
-            font-size: 1.2rem;
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 60px;
+            text-align: center; color: white; font-size: 1.15rem; margin: 14px 0; padding: 9px 18px;
+            background: rgba(255,255,255,0.12); border-radius: 60px; font-weight: 600;
+            border: 1px solid var(--glass-border); backdrop-filter: blur(8px);
         }
+        
         .alphabet-container {
-            background: rgba(255,255,255,0.1);
-            border-radius: 28px;
-            padding: 20px;
-            backdrop-filter: blur(15px);
+            background: var(--glass-bg); border-radius: 30px; padding: 22px;
+            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25), inset 0 1px 0 var(--glass-highlight);
         }
         .alphabet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-            gap: 12px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+            gap: 11px;
         }
+        
         .letter-btn {
             aspect-ratio: 1;
-            border: 2px solid rgba(255,255,255,0.4);
-            border-radius: 18px;
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: clamp(1.4rem, 4.2vw, 2.1rem);
             font-weight: 800;
             cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center;
             color: white;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+            box-shadow: 
+                0 6px 20px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.25),
+                inset 0 -2px 0 rgba(0,0,0,0.15);
         }
-        .letter-btn:nth-child(8n+2) { background: linear-gradient(135deg, #4D96FF, #6BCB77); }
-        .letter-btn:nth-child(8n+3) { background: linear-gradient(135deg, #FFD93D, #FFB347); }
-        .letter-btn:nth-child(8n+4) { background: linear-gradient(135deg, #9B59B6, #E74C3C); }
-        .letter-btn:nth-child(8n+5) { background: linear-gradient(135deg, #1ABC9C, #3498DB); }
-        .letter-btn:nth-child(8n+6) { background: linear-gradient(135deg, #E91E63, #9C27B0); }
-        .letter-btn:nth-child(8n+7) { background: linear-gradient(135deg, #00BCD4, #2196F3); }
-        .letter-btn:nth-child(8n+0) { background: linear-gradient(135deg, #FF9800, #F44336); }
+        
+        .letter-btn:nth-child(8n+1) { background: var(--grad-1); }
+        .letter-btn:nth-child(8n+2) { background: var(--grad-2); }
+        .letter-btn:nth-child(8n+3) { background: var(--grad-3); color: #2d2d2d; text-shadow: 0 1px 3px rgba(255,255,255,0.5); }
+        .letter-btn:nth-child(8n+4) { background: var(--grad-4); }
+        .letter-btn:nth-child(8n+5) { background: var(--grad-5); }
+        .letter-btn:nth-child(8n+6) { background: var(--grad-6); }
+        .letter-btn:nth-child(8n+7) { background: var(--grad-7); color: #2d2d2d; text-shadow: 0 1px 3px rgba(255,255,255,0.5); }
+        .letter-btn:nth-child(8n+0) { background: var(--grad-8); color: #2d2d2d; text-shadow: 0 1px 3px rgba(255,255,255,0.5); }
+        
+        .letter-btn:hover {
+            transform: translateY(-5px) scale(1.06) rotate(1.5deg);
+            border-color: rgba(255, 255, 255, 0.6);
+            z-index: 5;
+            box-shadow: 
+                0 12px 35px rgba(0,0,0,0.35),
+                0 0 25px var(--glow-secondary),
+                0 0 45px var(--glow-primary),
+                inset 0 0 25px rgba(255,255,255,0.2);
+        }
         
         .letter-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.94) !important;
+            transition: 0.08s;
+            box-shadow: 
+                0 3px 12px rgba(0,0,0,0.3),
+                inset 0 2px 8px rgba(0,0,0,0.2);
         }
+        
         .letter-btn.glow {
-            animation: megaGlow 0.3s ease;
+            animation: neonPulse 0.35s ease-out;
         }
-        @keyframes megaGlow {
-            0% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
-            30% { box-shadow: 0 0 30px 15px rgba(255,215,0,0.8); }
-            100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
+        @keyframes neonPulse {
+            0% {
+                box-shadow: 0 6px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.25);
+                transform: scale(1);
+            }
+            40% {
+                box-shadow: 0 0 35px var(--glow-primary), 0 0 70px var(--glow-secondary), 0 0 100px rgba(255,215,0,0.5), inset 0 0 30px rgba(255,255,255,0.4);
+                transform: scale(0.96);
+            }
+            100% {
+                box-shadow: 0 6px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.25);
+                transform: scale(1);
+            }
+        }
+        
+        .letter-btn::before {
+            content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.35) 0%, transparent 65%);
+            opacity: 0; transition: opacity 0.25s; pointer-events: none; transform: rotate(30deg);
+        }
+        .letter-btn:hover::before { opacity: 1; }
+        
+        .letter-btn::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 45%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+            border-radius: 20px 20px 50% 50%; pointer-events: none; opacity: 0.6;
         }
         
         .sound-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            position: fixed; bottom: 18px; right: 18px; width: 52px; height: 52px; border-radius: 50%;
             background: linear-gradient(135deg, #ffd700, #ffed4e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            font-size: 1.3rem;
-            border: none;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.35), 0 0 25px rgba(255,215,0,0.4);
+            z-index: 1000; font-size: 1.35rem; border: none; transition: all 0.25s ease;
         }
-        .sound-toggle.muted {
-            background: linear-gradient(135deg, #888, #aaa);
-        }
+        .sound-toggle:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 7px 25px rgba(0,0,0,0.4), 0 0 35px rgba(255,215,0,0.6); }
+        .sound-toggle:active { transform: scale(0.95); }
+        .sound-toggle.muted { background: linear-gradient(135deg, #666, #888); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         
         .back-home {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-            font-size: 1.5rem;
-            border: 2px solid rgba(255,255,255,0.5);
-            color: white;
+            position: fixed; bottom: 18px; left: 18px; width: 52px; height: 52px; border-radius: 50%;
+            background: var(--glass-bg); backdrop-filter: blur(12px);
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            z-index: 1000; font-size: 1.45rem; border: 2px solid var(--glass-border); color: white;
+            transition: all 0.25s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        }
+        .back-home:hover { 
+            transform: translateY(-3px) scale(1.08); background: rgba(255,255,255,0.25);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.35), 0 0 20px rgba(255,255,255,0.3);
         }
         
-        @media (max-width: 600px) {
-            .alphabet-grid {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 8px;
-            }
-            .letter-btn {
-                min-height: 55px;
-                font-size: 1.4rem;
-                border-radius: 12px;
-            }
-            .phone-number span {
-                font-size: 1.1rem;
-            }
-            .header-logo img {
-                width: 45px;
-                height: 45px;
-            }
-            .lang-btn {
-                padding: 4px 10px;
-                font-size: 0.7rem;
-            }
+        footer { text-align: center; color: rgba(255,255,255,0.7); padding: 25px 10px; margin-top: 25px; font-size: 0.85rem; }
+        
+        @media (max-width: 700px) {
+            .alphabet-grid { grid-template-columns: repeat(5, 1fr); gap: 9px; }
+            .letter-btn { min-height: 62px; border-radius: 17px; font-size: 1.35rem; }
+            .language-selector { padding: 11px; gap: 6px; }
+            .lang-btn { padding: 4px 9px; font-size: 0.73rem; }
+            .header-logo img { width: 48px; height: 48px; }
+            .phone-number span { font-size: 1.3rem; }
         }
+        @media (max-width: 420px) {
+            .alphabet-grid { grid-template-columns: repeat(4, 1fr); gap: 7px; }
+            .letter-btn { min-height: 54px; font-size: 1.2rem; border-radius: 14px; }
+            .alphabet-container { padding: 16px; }
+            .support-card { padding: 24px 18px; }
+        }
+        
+        .letter-btn:focus, .lang-btn:focus, .nav-btn:focus { outline: 3px solid #ffd700; outline-offset: 3px; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
     </style>
 </head>
 <body>
 
-<!-- СТРАНИЦА 1: ЗАСТАВКА (3 секунды) -->
+<div class="bg-particles" id="particles"></div>
+
+<!-- СТРАНИЦА 1: ЗАСТАВКА -->
 <div class="page splash active" id="pageSplash">
     <div style="text-align: center;">
-        <img src="favicon.ico" alt="Логотип" class="logo-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234D96FF%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-weight=%22bold%22%3E🤖%3C/text%3E%3C/svg%3E'">
+        <img src="favicon.ico" alt="Логотип" class="logo-img" 
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234D96FF%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-weight=%22bold%22%3E📚%3C/text%3E%3C/svg%3E'">
         <h2>Анти ИИ Азбука</h2>
-        <p style="color: rgba(255,255,255,0.7); margin-top: 15px;">загрузка...</p>
+        <p style="color: rgba(255,255,255,0.75); margin-top: 14px; font-size: 0.95rem;">✨ загрузка...</p>
     </div>
 </div>
 
-<!-- СТРАНИЦА 2: ПОДДЕРЖКА ПРОЕКТА -->
+<!-- СТРАНИЦА 2: ПОДДЕРЖКА -->
 <div class="page" id="pageSupport">
     <div class="container">
         <div class="header">
             <div class="header-logo">
-                <img src="favicon.ico" alt="Логотип" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234D96FF%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-weight=%22bold%22%3E🤖%3C/text%3E%3C/svg%3E'">
+                <img src="favicon.ico" alt="Логотип" 
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234D96FF%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-weight=%22bold%22%3E📚%3C/text%3E%3C/svg%3E'">
                 <h1>Анти ИИ Азбука</h1>
             </div>
         </div>
@@ -384,18 +349,18 @@
             
             <div class="phone-number">
                 <span>📱 8-920-227-56-76</span>
-                <button class="copy-btn" id="copyPhoneBtn">📋 Копировать номер</button>
+                <button class="copy-btn" id="copyPhoneBtn">📋 Копировать</button>
             </div>
-            <div id="copyMessage" style="font-size: 0.9rem; margin-top: -10px;"></div>
+            <div id="copyMessage" style="font-size: 0.9rem; margin-top: -8px; min-height: 22px;"></div>
             
-            <div class="description">
-                ✅ Деньги придут мгновенно. Без комиссии. Безопасно.
+            <div class="description" style="margin-top: 15px;">
+                ✅ Деньги придут мгновенно • Без комиссии • Безопасно
             </div>
             
             <div class="thanks">❤️ Спасибо за поддержку!</div>
             
             <div class="projects-link">
-                🌟 НАШИ ПРОЕКТЫ 👉 <a href="https://ancf-hue.github.io/" target="_blank">https://ancf-hue.github.io/</a>
+                🌟 НАШИ ПРОЕКТЫ 👉 <a href="https://ancf-hue.github.io/" target="_blank">ancf-hue.github.io</a>
             </div>
         </div>
         
@@ -410,7 +375,8 @@
     <div class="container">
         <div class="header">
             <div class="header-logo">
-                <img src="favicon.ico" alt="Логотип" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234D96FF%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-weight=%22bold%22%3E🤖%3C/text%3E%3C/svg%3E'">
+                <img src="favicon.ico" alt="Логотип" 
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234D96FF%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-weight=%22bold%22%3E📚%3C/text%3E%3C/svg%3E'">
                 <h1>Анти ИИ Азбука</h1>
             </div>
         </div>
@@ -424,87 +390,203 @@
     </div>
 </div>
 
-<!-- КНОПКИ -->
-<button class="sound-toggle" id="soundToggle" title="Вкл/Выкл звук">🔊</button>
+<!-- КНОПКИ УПРАВЛЕНИЯ -->
+<button class="sound-toggle" id="soundToggle" title="Звук вкл/выкл">🔊</button>
 <button class="back-home" id="backHomeBtn" title="На главную">🏠</button>
 
 <script>
-    // ========== ВСЕ 8 ЯЗЫКОВ ==========
-    const LANGUAGES = {
-        ru: { flag: '🇷🇺', name: 'Русский', letters: 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split(''), tts: 'ru-RU', useAudioFiles: true },
-        en: { flag: '🇬🇧', name: 'English', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), tts: 'en-US', useAudioFiles: false },
-        es: { flag: '🇪🇸', name: 'Español', letters: 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split(''), tts: 'es-ES', useAudioFiles: false },
-        fr: { flag: '🇫🇷', name: 'Français', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), tts: 'fr-FR', useAudioFiles: false },
-        de: { flag: '🇩🇪', name: 'Deutsch', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'.split(''), tts: 'de-DE', useAudioFiles: false },
-        zh: { flag: '🇨🇳', name: '中文', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), tts: 'zh-CN', useAudioFiles: false },
-        ar: { flag: '🇸🇦', name: 'العربية', letters: 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'.split(''), tts: 'ar-SA', useAudioFiles: false, rtl: true },
-        ja: { flag: '🇯🇵', name: '日本語', letters: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん'.split(''), tts: 'ja-JP', useAudioFiles: false }
-    };
-
+    // ========== ГЕНЕРАЦИЯ ФОНОВЫХ ЧАСТИЦ ==========
+    function createParticles() {
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 25; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 15 + 's';
+            p.style.animationDuration = (12 + Math.random() * 10) + 's';
+            container.appendChild(p);
+        }
+    }
+    createParticles();
+    
     // ========== УПРАВЛЕНИЕ СТРАНИЦАМИ ==========
     const pages = {
         splash: document.getElementById('pageSplash'),
         support: document.getElementById('pageSupport'),
         alphabet: document.getElementById('pageAlphabet')
     };
-    
     let currentPage = 'splash';
     
     function showPage(pageId) {
-        Object.keys(pages).forEach(key => {
-            pages[key].classList.remove('active');
-        });
+        Object.keys(pages).forEach(key => pages[key].classList.remove('active'));
         pages[pageId].classList.add('active');
         currentPage = pageId;
     }
     
-    // Заставка 3 секунды, потом страница поддержки
-    setTimeout(() => {
-        if (currentPage === 'splash') {
-            showPage('support');
-        }
-    }, 3000);
+    setTimeout(() => { if (currentPage === 'splash') showPage('support'); }, 3000);
     
     function goToAlphabet() {
         showPage('alphabet');
-        if (typeof renderAlphabet === 'function') {
-            renderAlphabet();
-        }
+        if (typeof renderAlphabet === 'function') renderAlphabet();
     }
     
-    // Кнопка "На главную" (ведёт на страницу поддержки)
-    document.getElementById('backHomeBtn').addEventListener('click', () => {
-        showPage('support');
-    });
+    document.getElementById('backHomeBtn').addEventListener('click', () => showPage('support'));
     
-    // ========== АЗБУКА ==========
+    // ========== ДАННЫЕ ЯЗЫКОВ ==========
+    const LANGUAGES = {
+        ru: { flag: '🇷🇺', name: 'Русский', letters: 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split(''), tts: 'ru-RU', audioFolder: 'ru' },
+        en: { flag: '🇬🇧', name: 'English', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), tts: 'en-US', audioFolder: 'en' },
+        es: { flag: '🇪🇸', name: 'Español', letters: 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split(''), tts: 'es-ES', audioFolder: 'es' },
+        fr: { flag: '🇫🇷', name: 'Français', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), tts: 'fr-FR', audioFolder: 'fr' },
+        de: { flag: '🇩🇪', name: 'Deutsch', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'.split(''), tts: 'de-DE', audioFolder: 'de' },
+        zh: { flag: '🇨🇳', name: '中文', letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), tts: 'zh-CN', audioFolder: 'zh' },
+        ar: { flag: '🇸🇦', name: 'العربية', letters: 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'.split(''), tts: 'ar-SA', audioFolder: 'ar', rtl: true },
+        ja: { flag: '🇯🇵', name: '日本語', letters: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん'.split(''), tts: 'ja-JP', audioFolder: 'ja' }
+    };
+    
+    // ========== АЗБУКА ЛОГИКА ==========
     let currentLang = 'ru';
     let soundEnabled = true;
     let currentAudio = null;
     const synth = window.speechSynthesis;
     const audioCache = new Map();
+    let voicesLoaded = false;
     
-    // Копирование номера телефона
-    const copyBtn = document.getElementById('copyPhoneBtn');
-    const copyMessageDiv = document.getElementById('copyMessage');
-    
-    copyBtn.addEventListener('click', async () => {
-        const phoneNumber = '8-920-227-56-76';
-        try {
-            await navigator.clipboard.writeText(phoneNumber);
-            copyMessageDiv.innerHTML = '<span class="copy-success">✅ Номер скопирован!</span>';
-            setTimeout(() => {
-                copyMessageDiv.innerHTML = '';
-            }, 2000);
-        } catch (err) {
-            copyMessageDiv.innerHTML = '<span style="color: #ff6b6b;">❌ Не удалось скопировать</span>';
-            setTimeout(() => {
-                copyMessageDiv.innerHTML = '';
-            }, 2000);
+    // ========== ЗАГРУЗКА ГОЛОСОВ ==========
+    function loadVoices() {
+        const voices = synth.getVoices();
+        if (voices.length > 0) {
+            voicesLoaded = true;
+            console.log(`✅ Загружено ${voices.length} голосов`);
         }
-    });
+    }
     
-    // Построение кнопок языков (все 8)
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    loadVoices();
+    setTimeout(loadVoices, 500);
+    
+    // ========== ПОИСК ГОЛОСА ==========
+    function getVoice(langCode) {
+        const voices = synth.getVoices();
+        const targetLang = LANGUAGES[langCode]?.tts || langCode;
+        
+        for (const voice of voices) {
+            if (voice.lang.toLowerCase().startsWith(targetLang.toLowerCase())) return voice;
+        }
+        for (const voice of voices) {
+            if (voice.lang.startsWith(targetLang.split('-')[0])) return voice;
+        }
+        return null;
+    }
+    
+    // ========== TTS С ВЫБРАННЫМ ГОЛОСОМ ==========
+    function useSpeechSynthesis(letter, langCode) {
+        if (!soundEnabled) return;
+        synth.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(letter);
+        utterance.lang = LANGUAGES[langCode].tts;
+        utterance.rate = 0.7;
+        utterance.pitch = 1.0;
+        
+        const voice = getVoice(langCode);
+        if (voice) utterance.voice = voice;
+        
+        synth.speak(utterance);
+    }
+    
+    // ========== ВОСПРОИЗВЕДЕНИЕ АУДИОФАЙЛОВ (soundsru) ==========
+    function playAudioFile(letter, langCode) {
+        if (!soundEnabled) return;
+        
+        // Только для русского языка используем аудиофайлы из soundsru
+        if (langCode === 'ru') {
+            const audioPath = `soundsru/${letter}.mp3`;
+            
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            
+            // Проверяем кэш
+            if (audioCache.has(audioPath)) {
+                const cached = audioCache.get(audioPath);
+                cached.currentTime = 0;
+                cached.play().catch(() => useSpeechSynthesis(letter, langCode));
+                currentAudio = cached;
+                return;
+            }
+            
+            const audio = new Audio(audioPath);
+            audioCache.set(audioPath, audio);
+            
+            audio.play()
+                .then(() => {
+                    currentAudio = audio;
+                })
+                .catch((err) => {
+                    // Файл не найден — используем TTS
+                    console.log(`📁 Файл не найден: ${audioPath}, используем TTS`);
+                    audioCache.delete(audioPath);
+                    useSpeechSynthesis(letter, langCode);
+                });
+        } else {
+            // Для других языков используем TTS
+            useSpeechSynthesis(letter, langCode);
+        }
+    }
+    
+    // ========== ОБРАБОТКА КЛИКА ПО БУКВЕ ==========
+    function playLetter(letter, btn) {
+        btn.classList.add('glow');
+        setTimeout(() => btn.classList.remove('glow'), 350);
+        
+        if (navigator.vibrate) navigator.vibrate(25);
+        
+        playAudioFile(letter, currentLang);
+    }
+    
+    // ========== РЕНДЕР АЛФАВИТА ==========
+    function renderAlphabet() {
+        const grid = document.getElementById('alphabetGrid');
+        if (!grid) return;
+        
+        const data = LANGUAGES[currentLang];
+        const label = document.getElementById('currentLang');
+        if (label) label.innerHTML = `${data.flag} ${data.name} • ${data.letters.length} букв`;
+        
+        grid.innerHTML = '';
+        grid.style.direction = data.rtl ? 'rtl' : 'ltr';
+        
+        data.letters.forEach((letter, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'letter-btn';
+            btn.textContent = letter;
+            btn.setAttribute('aria-label', `Буква ${letter}`);
+            btn.style.animation = `fadeIn 0.25s ease ${i * 0.015}s backwards`;
+            
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                playLetter(letter, btn);
+            });
+            
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                playLetter(letter, btn);
+            }, { passive: false });
+            
+            grid.appendChild(btn);
+        });
+    }
+    
+    // Анимация появления
+    const animStyle = document.createElement('style');
+    animStyle.textContent = `@keyframes fadeIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }`;
+    document.head.appendChild(animStyle);
+    
+    // ========== КНОПКИ ЯЗЫКОВ ==========
     const langSelector = document.getElementById('langSelector');
     if (langSelector) {
         Object.entries(LANGUAGES).forEach(([code, lang]) => {
@@ -512,107 +594,19 @@
             btn.className = `lang-btn ${code === currentLang ? 'active' : ''}`;
             btn.dataset.lang = code;
             btn.textContent = `${lang.flag} ${lang.name}`;
+            btn.setAttribute('aria-label', `Выбрать язык: ${lang.name}`);
+            
             btn.addEventListener('click', () => {
                 currentLang = code;
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
+                document.querySelectorAll('.lang-btn').forEach(b => 
+                    b.classList.toggle('active', b.dataset.lang === code));
                 renderAlphabet();
             });
             langSelector.appendChild(btn);
         });
     }
     
-    function playAudioFile(letter, langCode) {
-        if (!soundEnabled) return;
-        
-        if (langCode === 'ru' && letter.match(/[А-ЯЁ]/i)) {
-            const fileName = `${letter}.mp3`;
-            const audioPath = `soundsru/${fileName}`;
-            
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-            
-            if (audioCache.has(audioPath)) {
-                const cachedAudio = audioCache.get(audioPath);
-                cachedAudio.currentTime = 0;
-                cachedAudio.play().catch(() => useSpeechSynthesis(letter, langCode));
-                currentAudio = cachedAudio;
-                return;
-            }
-            
-            const audio = new Audio(audioPath);
-            audioCache.set(audioPath, audio);
-            audio.play().catch(() => {
-                audioCache.delete(audioPath);
-                useSpeechSynthesis(letter, langCode);
-            });
-            currentAudio = audio;
-        } else {
-            useSpeechSynthesis(letter, langCode);
-        }
-    }
-    
-    function useSpeechSynthesis(letter, langCode) {
-        if (!soundEnabled) return;
-        synth.cancel();
-        const u = new SpeechSynthesisUtterance(letter);
-        u.lang = LANGUAGES[langCode].tts;
-        u.rate = 0.75;
-        u.pitch = 1.1;
-        synth.speak(u);
-    }
-    
-    function playLetter(letter, btn) {
-        btn.classList.add('glow');
-        setTimeout(() => btn.classList.remove('glow'), 300);
-        if (navigator.vibrate) navigator.vibrate(30);
-        playAudioFile(letter, currentLang);
-    }
-    
-    function renderAlphabet() {
-        const grid = document.getElementById('alphabetGrid');
-        if (!grid) return;
-        const data = LANGUAGES[currentLang];
-        const currentLangDiv = document.getElementById('currentLang');
-        if (currentLangDiv) currentLangDiv.innerHTML = `${data.flag} ${data.name} • ${data.letters.length} букв`;
-        grid.innerHTML = '';
-        
-        // Для арабского языка - правый текст
-        if (data.rtl) {
-            grid.style.direction = 'rtl';
-        } else {
-            grid.style.direction = 'ltr';
-        }
-        
-        data.letters.forEach((letter, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'letter-btn';
-            btn.textContent = letter;
-            btn.style.animation = `fadeInScale 0.2s ease ${i * 0.01}s backwards`;
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                playLetter(letter, btn);
-            });
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                playLetter(letter, btn);
-            }, { passive: false });
-            grid.appendChild(btn);
-        });
-    }
-    
-    // Добавляем анимацию
-    const animStyle = document.createElement('style');
-    animStyle.textContent = `
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-    `;
-    document.head.appendChild(animStyle);
-    
-    // Звук тумблер
+    // ========== КНОПКА ЗВУКА ==========
     const soundToggle = document.getElementById('soundToggle');
     soundToggle.addEventListener('click', () => {
         soundEnabled = !soundEnabled;
@@ -623,19 +617,41 @@
         }
     });
     
-    // Инициализация азбуки
-    renderAlphabet();
+    // ========== КОПИРОВАНИЕ ТЕЛЕФОНА ==========
+    document.getElementById('copyPhoneBtn').addEventListener('click', async () => {
+        const phone = '8-920-227-56-76';
+        const msg = document.getElementById('copyMessage');
+        try {
+            await navigator.clipboard.writeText(phone);
+            msg.innerHTML = '<span class="copy-success">✅ Скопировано!</span>';
+            setTimeout(() => msg.innerHTML = '', 2200);
+        } catch {
+            msg.innerHTML = '<span style="color:#ff6b6b">❌ Ошибка</span>';
+            setTimeout(() => msg.innerHTML = '', 2200);
+        }
+    });
     
-    // Инициализация аудио на мобилках
-    function initAudioOnFirstTouch() {
-        const silentAudio = new Audio();
-        silentAudio.volume = 0;
-        silentAudio.play().catch(() => {});
-        document.body.removeEventListener('touchstart', initAudioOnFirstTouch);
-        document.body.removeEventListener('click', initAudioOnFirstTouch);
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    function initApp() {
+        renderAlphabet();
+        
+        // Разблокировка аудио на мобильных
+        function unlockAudio() {
+            const test = new Audio();
+            test.volume = 0.01;
+            test.play().catch(()=>{});
+            document.body.removeEventListener('touchstart', unlockAudio);
+            document.body.removeEventListener('click', unlockAudio);
+        }
+        document.body.addEventListener('touchstart', unlockAudio, { once: true });
+        document.body.addEventListener('click', unlockAudio, { once: true });
     }
-    document.body.addEventListener('touchstart', initAudioOnFirstTouch, { once: true });
-    document.body.addEventListener('click', initAudioOnFirstTouch, { once: true });
+    
+    if (voicesLoaded) {
+        initApp();
+    } else {
+        setTimeout(initApp, 800);
+    }
 </script>
 </body>
 </html>
