@@ -1,19 +1,19 @@
-User-agent: Yandex
-Allow: /
-
-User-agent: Googlebot
-Allow: /
-
+# Разрешить всем поисковым роботам доступ
 User-agent: *
+
+# Указываем путь к карте сайта (обязательно)
+Sitemap: https://anti-ai-abc.vercel.app/sitemap.xml
+
+# Базовые правила индексирования
 Allow: /
 
-Sitemap: https://ancf-hue.github.io/sitemap.xml
+# Блокируем служебные пути (если они есть)
+Disallow: /_next/
+Disallow: /api/
+Disallow: /static/
 
-# Запрещаем индексацию служебных страниц
-Disallow: /soundsru/
-Disallow: /*.mp3$
-Disallow: /*.ico$
-
-# Основные правила
+# Указываем задержку между запросами (для вежливости)
 Crawl-delay: 1
-Host: ancf-hue.github.io
+
+# Хост (помогает Яндексу, если сайт доступен с www и без)
+Host: anti-ai-abc.vercel.app
